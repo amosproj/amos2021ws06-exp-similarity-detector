@@ -1,0 +1,48 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Similarity Detector API"
+  license:
+    name: "MIT"
+paths:
+  /components:
+    description: "highest level in hierarchy, representing different component categories"
+    get:
+      description: "return list of component types - resistors"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type:
+                  array
+                items:
+                  properties:
+                    componentType:
+                      type: string
+                      example: resistors
+                      
+  /components/{componentType}/{componentId}/similar:
+    get:
+      description: return list of similar components
+      parameters:
+        - in: path
+          name: componentType
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: componentId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+        
