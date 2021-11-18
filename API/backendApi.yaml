@@ -5,6 +5,8 @@ info:
   license:
     name: "MIT"
 paths:
+
+  # general data access
   /components:
     description: "highest level in hierarchy, representing different component categories"
     get:
@@ -22,10 +24,32 @@ paths:
                     componentType:
                       type: string
                       example: resistors
-                      
-  /components/{componentType}/{componentId}/similar:
+
+  /components/{componentType}:
     get:
-      description: return list of similar components
+      description: return list of ids of all components in componentType
+      parameters:
+        - in: path
+          name: componentType
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type:
+                  array
+                items:
+                  properties:
+                    componentId:
+                      type: string
+                  
+  /components/{componentType}/{componentId}:
+    get:
+      description: return info of single component
       parameters:
         - in: path
           name: componentType
@@ -45,4 +69,53 @@ paths:
               schema:
                 type:
                   object
+                    
+  # corresponds to user story 1
+  # contains filter necessary for user story 3
+  /components/{componentType}/{componentId}/similar:
+    get:
+      description: return list of similar components
+      parameters:
+        - in: path
+          name: componentType
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: componentId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: filter
+          required: false
+          schema:
+            $ref: "#/components/schemas/filterQuery"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type:
+                  object
+    
+  # todo: manuelle ergänzungen - wie ist das gemeint?
+                  
+components:
+  schemas:
+    filterQuery:
+      type:
+        object
+      properties:
+        filterAttribute:
+          type: string
+          example: price
+        filterType:
+          type: string
+          example: "<"
+        filterValue:
+          type: string
+          example: "10"
+                  
         
