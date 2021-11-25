@@ -70,9 +70,10 @@ paths:
                 type:
                   object
                     
-  # corresponds to user story 1
-  # contains filter necessary for user story 3
+                  
   /components/{componentType}/{componentId}/similar:
+    # corresponds to user story 1
+    # contains filter necessary for user story 3
     get:
       description: return list of similar components
       parameters:
@@ -99,14 +100,39 @@ paths:
               schema:
                 type:
                   object
-    
-  # todo: manuelle ergänzungen - wie ist das gemeint?
+
+      # corresponds to user story 5 
+      post:
+        description: via this endpoint, users can suggest results for a similarity query they did
+        parameters:
+        - in: path
+          name: componentType
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: componentId
+          required: true
+          schema:
+            type: string        
+        - in: query
+          name: filter
+          required: false
+          schema:
+            $ref: "#/components/schemas/filterQuery"
+        requestBody:
+          description: the sugested part
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/part'
+
                   
 components:
   schemas:
     filterQuery:
-      type:
-        object
+      type: object
       properties:
         filterAttribute:
           type: string
@@ -117,5 +143,17 @@ components:
         filterValue:
           type: string
           example: "10"
+    part:
+      type: array
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+          value: 
+            type: string
+
+        
+        
                   
         
