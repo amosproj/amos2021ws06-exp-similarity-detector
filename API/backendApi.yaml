@@ -102,31 +102,36 @@ paths:
                   object
 
       # corresponds to user story 5 
-      post:
-        description: via this endpoint, users can suggest results for a similarity query they did
-        parameters:
-        - in: path
-          name: componentType
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: componentId
-          required: true
-          schema:
-            type: string        
-        - in: query
-          name: filter
-          required: false
-          schema:
-            $ref: "#/components/schemas/filterQuery"
-        requestBody:
-          description: the sugested part
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/part'
+    post:
+      description: via this endpoint, users can suggest results for a similarity query they did
+      parameters:
+      - in: path
+        name: componentType
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: componentId
+        required: true
+        schema:
+          type: string        
+      - in: query
+        name: filter
+        required: false
+        schema:
+          $ref: "#/components/schemas/filterQuery"
+      requestBody:
+        description: the sugested part
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/part'
+      responses:
+        204:
+          description: part saved
+        
+
 
                   
 components:
