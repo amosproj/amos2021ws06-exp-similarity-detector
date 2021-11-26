@@ -10,7 +10,7 @@ paths:
   /components:
     description: "highest level in hierarchy, representing different component categories"
     get:
-      description: "return list of component types - resistors"
+      description: "return list of component types - example: [\"resistors\", \"power_supplies\"]"
       responses:
         200:
           description: success
@@ -130,8 +130,6 @@ paths:
       responses:
         204:
           description: part saved
-        
-
 
                   
 components:
