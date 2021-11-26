@@ -7,119 +7,139 @@ info:
 paths:
 
   # general data access
-  /components:
+  /componentTypes:
     description: "highest level in hierarchy, representing different component categories"
     get:
-      description: "return list of component types - example: [\"resistors\", \"power_supplies\"]"
+      description: "return list of component types" 
       responses:
-        200:
+        "200":
           description: success
           content:
             application/json:
               schema:
-                type:
-                  array
-                items:
-                  properties:
-                    componentType:
-                      type: string
-                      example: resistors
+                $ref: "#/components/schemas/componentTypesList"
+                example:
+                  result:
+                    - name: "capacitators"
+                      displayName: "Capactitors"
+                    - name: "powerSupplies"
+                      displayName: "Power Supplies"   
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
-  /components/{componentType}:
+  # todo: 
+  # /componentTypes/{componentType}/schema:
+  #   get:
+  #     description: "returns list of attributes, enriched by information about filtering options for each attribute"
+
+  /componentTypes/{componentType}:
     get:
-      description: return list of ids of all components in componentType
+      description: return list of ids of all componentTypes in componentType
       parameters:
-        - in: path
-          name: componentType
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/componentType"
       responses:
-        200:
+        "200":
           description: success
           content:
             application/json:
               schema:
-                type:
-                  array
-                items:
-                  properties:
-                    componentId:
-                      type: string
+                $ref: "#/components/schemas/componentsListLowDetail"
+                example:
+                  result:
+                    - id: "243589"
+                      name: "Yageo SE025M1000A5S-1019 Elektrolyt-Kondensator"
+                    - id: "298293"
+                      name: "Julse LO025M1000A5S-2999 Elektrolyt-Kondensator"
+        "404":
+          description: "unknown component type"
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
                   
-  /components/{componentType}/{componentId}:
+  /componentTypes/{componentType}/{componentId}:
     get:
       description: return info of single component
       parameters:
-        - in: path
-          name: componentType
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: componentId
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
       responses:
-        200:
+        "200":
           description: success
           content:
             application/json:
               schema:
-                type:
-                  object
-                    
+                $ref:  "#/components/schemas/singleComponentHighDetail"
+                example:
+                  result:
+                    id: 298293,
+                    name: "Julse LO025M1000A5S-2999 Elektrolyt-Kondensator"
+                    numberOfTerminals: 343,
+                    height: 239.2493,
+                    voltage: 0.3,
+                    maximumDissipationFactor: 42.23    
+
+        "404": 
+          description: "id not found within component type"
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
                   
-  /components/{componentType}/{componentId}/similar:
+  /componentTypes/{componentType}/{componentId}/similar:
     # corresponds to user story 1
     # contains filter necessary for user story 3
     get:
       description: return list of similar components
       parameters:
-        - in: path
-          name: componentType
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: componentId
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: filter
-          required: false
-          schema:
-            $ref: "#/components/schemas/filterQuery"
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
+        - $ref: "#/components/parameters/filter"
       responses:
-        200:
+        "200":
           description: success
           content:
             application/json:
               schema:
-                type:
-                  object
+                $ref:  "#/components/schemas/similariesOfSomeComponent"
+                example:
+                  result: 
+                    - component_id_1: 948394
+                      component_id_2: 943482
+                      comment: "oof"
+                      differenceIn: 
+                        - "height"
+                        - "weight"
+                      type: "A"
+                    - component_id_1: 948394
+                      component_id_2: 345235
+                      comment: "big oof"
+                      differenceIn: 
+                        - "Microwave"
+                        - "Technology"
+                      type: "C"
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
       # corresponds to user story 5 
     post:
       description: via this endpoint, users can suggest results for a similarity query they did
       parameters:
-      - in: path
-        name: componentType
-        required: true
-        schema:
-          type: string
-      - in: path
-        name: componentId
-        required: true
-        schema:
-          type: string        
-      - in: query
-        name: filter
-        required: false
-        schema:
-          $ref: "#/components/schemas/filterQuery"
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
+        - $ref: "#/components/parameters/filter"
       requestBody:
         description: the sugested part
         required: true
@@ -128,13 +148,95 @@ paths:
             schema:
               $ref: '#/components/schemas/part'
       responses:
-        204:
+        "204":
           description: part saved
-
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
                   
 components:
+  parameters:
+    componentType:
+      in: path
+      name: componentType
+      required: true
+      schema:
+        type: string
+    componentId:
+      in: path
+      name: componentId
+      required: true
+      schema:
+        type: string
+    filter:
+      in: query
+      name: filter
+      required: false
+      schema:
+        $ref: "#/components/schemas/filter"
+
   schemas:
-    filterQuery:
+    componentTypesList:
+      type: object
+      properties:
+        result: 
+          type: array
+          items: 
+            type: object
+            properties:
+              name: 
+                type: string
+              displayName:
+                type: string
+    componentsListLowDetail:
+      type: object
+      properties:
+        result: 
+          type: array
+          items: 
+            type: object
+            properties:
+              id: 
+                type: string
+              name:
+                type: string   
+    singleComponentHighDetail:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            id: 
+              type: string
+            name: 
+              type: string
+            furtherAttributes:
+              type: string
+    similariesOfSomeComponent:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              component_id_1:
+                type: string
+              component_id_2:
+                type: string
+              comment:
+                type: string
+              differenceIn:
+                type: array
+                items:
+                  type: string
+              type: 
+                type: string  
+
+    filter:
       type: object
       properties:
         filterAttribute:
@@ -142,7 +244,7 @@ components:
           example: price
         filterType:
           type: string
-          example: "<"
+          example: ">"
         filterValue:
           type: string
           example: "10"
@@ -155,7 +257,14 @@ components:
             type: string
           value: 
             type: string
-
+    error:
+      type: object 
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: string
+    
         
         
                   
