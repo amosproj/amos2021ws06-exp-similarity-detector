@@ -72,4 +72,5 @@ Example: `2021-10-27_sprint-01-kanban-board.jpg`
   - [2022-02-09_sprint-13-user-documentation.pdf](./2022-02-09_sprint-13-user-documentation.pdf)
 - Sprint 14 (16.02.2022)
   - [2022-02-16_sprint-14-project-retrospective.pdf](./2022-02-16_sprint-14-project-retrospective.pdf)
+  - [2022-02-16_sprint-14-project-summary.docx](./2022-02-16_sprint-14-project-summary.docx)
   - [2022-02-16_sprint-14-project-summary.pdf](./2022-02-16_sprint-14-project-summary.pdf)

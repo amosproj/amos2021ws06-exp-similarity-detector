@@ -24,3 +24,17 @@
 - How to use the software
 
 - [User documentation](../Deliverables/2022-02-09_sprint-13-user-documentation.pdf)
+
+## Overall Documentation (Vitepress)
+
+- As PDF:
+  - [Vitepress Documentation](./Vitepress-Documentation.pdf)
+- Website (Azure):
+  - https://stsimilaritydetector.z6.web.core.windows.net/
+
+## OpenAPI Specification (Swagger UI)
+
+- As PDF:
+  - [Swagger UI](./Swagger-UI.pdf)
+- Website (Azure):
+  - https://apim-similarity-detector.azure-api.net/v1/docs
