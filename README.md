@@ -99,30 +99,9 @@ For the cooperation please follow the: [Code Of Conduct](./CODE_OF_CONDUCT.md).
 
 ### Demo Video
 
-<p align="center">
-  <video 
-    width="50%" 
-    poster="./images/Video.jpg">
-    <source 
-      src="./Deliverables/2022-02-03_sprint-12-demo-day-video.mkv" 
-      type="video/mp4">
-    Your browser does not support the video tag. 
-  </video>
-</p>
+https://user-images.githubusercontent.com/38668040/154354706-a872a359-7d0e-4294-9aa7-3ad88ba600e3.mp4
 
-<p align="center">
-  <a 
-    title="Open video on GitHub in new tab"
-    target="_blank"
-    href="https://github.com/amosproj/amos2021ws06-exp-similarity-detector/blob/main/Deliverables/2022-02-03_sprint-12-demo-day-video.mkv">
-    <img 
-      width="50%"
-      alt="Demo Video"
-      src="./images/Video.jpg">
-  </a>
-</p>
-
-- [Download](https://github.com/amosproj/amos2021ws06-exp-similarity-detector/raw/main/Deliverables/2022-02-03_sprint-12-demo-day-video.mkv)
+- [Download](https://github.com/amosproj/amos2021ws06-exp-similarity-detector/blob/update-docs/images/video/AMOS-Demo.mp4?raw=true)
 
 ### Login / Register
 
