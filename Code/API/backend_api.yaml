@@ -1,0 +1,501 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Similarity Detector API"
+  license:
+    name: "MIT"
+  description: "OpenAPI specification for the Similarity Detector API"
+servers:
+  - url: https://apim-similarity-detector.azure-api.net/v1
+    description: Azure Backend
+
+paths:
+  # general data access
+  /componentTypes:
+    description: "highest level in hierarchy, representing different component categories"
+    get:
+      operationId: ReadComponentTypes
+      tags:
+        - "component types"
+      summary: "List of component types"
+      description: "Highest level in hierarchy, representing different component categories"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/componentTypesList"
+              example:
+                result:
+                  - name: "capacitators"
+                    displayName: "Capactitors"
+                    tableName: "capacitor"
+                  - name: "powerSupplies"
+                    displayName: "Power Supplies"
+                    tableName: "powerSupply"
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+  /componentTypes/{componentType}:
+    get:
+      operationId: ReadComponents
+      tags:
+        - "components"
+      summary: "List of components with ID and name"
+      description: "Return list of ids and names of all componentTypes in componentType"
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/componentsListLowDetail"
+              example:
+                result:
+                  - id: 243589
+                    name: "Yageo SE025M1000A5S-1019 Elektrolyt-Kondensator"
+                  - id: 298293
+                    name: "Julse LO025M1000A5S-2999 Elektrolyt-Kondensator"
+        "404":
+          description: "unknown component type"
+
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+    post:
+      operationId: CreateComponent
+      tags:
+        - "components"
+      summary: "Creates new component in DB"
+      description: "Create new component for component type in database"
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+      requestBody:
+        description: component to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/suggestedComponentDatabase"
+      responses:
+        "404":
+          description: "unknown component type"
+
+        "201":
+          description: component transmitted successfully
+          content:
+            text/plain:
+              schema:
+                type: integer
+
+        "409":
+          description: malformatted user input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+  /componentTypes/{componentType}/{componentId}:
+    get:
+      operationId: ReadComponent
+      tags:
+        - "component"
+      summary: "Object with all attributes from component"
+      description: "Return info as object with all attributes and values for a single component"
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/singleComponentHighDetail"
+              example:
+                result:
+                  id: 298293
+                  name: "Julse LO025M1000A5S-2999 Elektrolyt-Kondensator"
+                  numberOfTerminals: 343
+                  height: 239.2493
+                  voltage: 0.3
+                  maximumDissipationFactor: 42.23
+
+        "404":
+          description: "id not found within component type"
+
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+  /componentTypes/{componentType}/{componentId}/similarities:
+    # corresponds to user story 1
+    # contains filtering functionality necessary for user story 3
+    get:
+      operationId: ReadSimilarities
+      tags:
+        - "similarities"
+      summary: "List of similar components"
+      description: "Return list of similar components to the component with the requested ID"
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
+        - $ref: "#/components/parameters/filters"
+        - $ref: "#/components/parameters/ordering"
+        - $ref: "#/components/parameters/differenceInAsString"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/similariesOfSomeComponent"
+              example:
+                result:
+                  - component_id_1: 948394
+                    component_id_2: 943482
+                    comment: "oof"
+                    differenceIn:
+                      - "height"
+                      - "weight"
+                    type: "A"
+                  - component_id_1: 948394
+                    component_id_2: 345235
+                    comment: "big oof"
+                    differenceIn:
+                      - "Microwave"
+                      - "Technology"
+                    type: "C"
+        "500":
+          description: "internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+    # corresponds to user story 5
+    post:
+      operationId: CreateSimilarity
+      tags:
+        - "similarities"
+      summary: "Creates similarity suggestion in DB"
+      description: "Via this endpoint, users can suggest results for a similarity query they did"
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+        - $ref: "#/components/parameters/componentId"
+      requestBody:
+        description: the suggested component
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/suggestedComponentRetraining"
+            example:
+              component_id_2: 40596
+              user_comment: "should be also shown as similar component as it only differs in height"
+      responses:
+        "201":
+          description: comment transmitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/suggestedComponentRetrainingResult"
+
+        "404":
+          description: "unknown component type"
+        "409":
+          description: malformatted user input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorMessage"
+
+  /filter/{componentType}:
+    description: "Get all attributes with their range"
+    get:
+      parameters:
+        - $ref: "#/components/parameters/componentType"
+      # operationId: ReadRanges
+      tags:
+        - "filter"
+      summary: "All attributes with range"
+      description: "Get a list with all attributes and with their name, type and range (values)."
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              example:
+                result:
+                  - name: "id"
+                    type: "float"
+                    values: [1, 99]
+                  - name: "height"
+                    type: "float"
+                    values: [0.9474737, 3.47346363]
+
+  /docs:
+    get:
+      operationId: ReadDocs
+      tags:
+        - documentation
+      summary: "OpenAPI Swagger UI"
+      description: "Returns the HTML page containing the OpenAPI Swagger UI, which is an overview over all available endpoints"
+      responses:
+        "200":
+          description: "success"
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /openapi:
+    get:
+      operationId: ReadOpenApi
+      tags:
+        - documentation
+      summary: "YAML file for the OpenAPI specification"
+      description: "Returns the YAML document that the OpenAPI Swagger UI is based on (this file)"
+      responses:
+        "200":
+          description: "success"
+          content:
+            application/yaml:
+              schema:
+                type: object
+
+  /machineLearningMock:
+    description: "Get a similarity response from the mocked ML model"
+    post:
+      operationId: CreateMLMockModel
+      tags:
+        - "machine learning"
+      summary: "Mocked ML API response"
+      description: "Similarity response (mocked)"
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "The complete component 1 and component 2 with all its attributes."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/machineLearningInput"
+            example:
+              component_1:
+                id: 1
+                name: "Capacitor 1"
+              component_2:
+                id: 2
+                name: "Capacitor 2"
+      responses:
+        "200":
+          description: success
+          content:
+            text/plain:
+              example: "Similarity Type : B . Comment : Difference in : AEC _ QUALIFIED , Lead Finish , Product Height , Temp . <EOS>"
+
+components:
+  parameters:
+    componentType:
+      in: path
+      name: componentType
+      required: true
+      schema:
+        type: string
+
+    componentId:
+      in: path
+      name: componentId
+      required: true
+      schema:
+        type: integer
+
+    filters:
+      in: query
+      name: filters
+      required: false
+      schema:
+        $ref: "#/components/schemas/filters"
+
+    ordering:
+      in: query
+      name: ordering
+      required: false
+      schema:
+        $ref: "#/components/schemas/ordering"
+
+    differenceInAsString:
+      in: query
+      name: differenceInAsString
+      required: false
+      schema:
+        $ref: "#/components/schemas/differenceInAsString"
+
+  schemas:
+    componentTypesList:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              displayName:
+                type: string
+              tableName:
+                type: string
+
+    componentsListLowDetail:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+
+    singleComponentHighDetail:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            furtherAttributes:
+              type: string
+
+    similariesOfSomeComponent:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              component_id_1:
+                type: integer
+              component_id_2:
+                type: integer
+              comment:
+                type: string
+              differenceIn:
+                type: array
+                items:
+                  type: string
+              type:
+                type: string
+                
+    filters:
+      type: array
+      items:
+        type: object
+        properties:
+          attribute:
+            type: string
+            example: price
+          operator:
+            type: string
+            example: ">"
+          value:
+            type: string
+            example: "10"
+
+    ordering:
+      type: string
+      example: "type"
+
+    differenceInAsString:
+      type: boolean
+      example: true
+
+    # todo: change
+    suggestedComponentRetraining:
+      type: object
+      properties:
+        component_id_2:
+          type: integer
+        user_comment:
+          type: string
+
+    machineLearningInput:
+      type: object
+      properties:
+        component_1:
+          type: object
+        component_2:
+          type: object
+
+    suggestedComponentDatabase:
+      type: object
+      properties:
+        componentAttribute:
+          type: string
+
+    suggestedComponentRetrainingResult:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            id:
+              type: integer
+            component_id_1:
+              type: integer
+            component_id_2:
+              type: integer
+            user_comment:
+              type: string
+            # TODO: is type necessary here? should probably be called componentType to not confuse it with type from similarity
+            type:
+              type: string
+
+    errorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: string
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
