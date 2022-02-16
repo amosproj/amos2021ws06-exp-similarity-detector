@@ -31,6 +31,8 @@
   - [Vitepress Documentation](./Vitepress-Documentation.pdf)
 - Website (Azure):
   - https://stsimilaritydetector.z6.web.core.windows.net/
+- Website (GitHub pages):
+  - https://amosproj.github.io/amos2021ws06-exp-similarity-detector/
 
 ## OpenAPI Specification (Swagger UI)
 
@@ -38,3 +40,5 @@
   - [Swagger UI](./Swagger-UI.pdf)
 - Website (Azure):
   - https://apim-similarity-detector.azure-api.net/v1/docs
+- Website (GitHub pages):
+  - https://amosproj.github.io/amos2021ws06-exp-similarity-detector/swagger-ui/

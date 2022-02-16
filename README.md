@@ -84,6 +84,7 @@ For the cooperation please follow the: [Code Of Conduct](./CODE_OF_CONDUCT.md).
   - [User documentation](./Deliverables/2022-02-09_sprint-13-user-documentation.pdf)
 - Documentation
   - Overall Documentation (Vitepress):
+    - https://amosproj.github.io/amos2021ws06-exp-similarity-detector/
     - https://stsimilaritydetector.z6.web.core.windows.net/
   - OpenAPI Documentation (Swagger UI):
     - https://apim-similarity-detector.azure-api.net/v1/docs
@@ -101,7 +102,7 @@ For the cooperation please follow the: [Code Of Conduct](./CODE_OF_CONDUCT.md).
 
 https://user-images.githubusercontent.com/38668040/154354706-a872a359-7d0e-4294-9aa7-3ad88ba600e3.mp4
 
-- [Download](https://github.com/amosproj/amos2021ws06-exp-similarity-detector/blob/update-docs/images/video/AMOS-Demo.mp4?raw=true)
+- [Download](https://github.com/amosproj/amos2021ws06-exp-similarity-detector/blob/main/images/video/AMOS-Demo.mp4?raw=true)
 
 ### Login / Register
 
