@@ -24,25 +24,25 @@
 - [Projects](#projects)
 - [Documentation](#documentation)
 - [Showcase](#showcase)
-    - [Demo Video](#demo-video)
-    - [Login / Register](#login--register)
-    - [Similarity Search](#similarity-search)
-    - [Added Components](#added-components)
-    - [Suggest Component / Add Capacitor](#suggest-component--add-capacitor)
+  - [Demo Video](#demo-video)
+  - [Login / Register](#login--register)
+  - [Similarity Search](#similarity-search)
+  - [Added Components](#added-components)
+  - [Suggest Component / Add Capacitor](#suggest-component--add-capacitor)
 - [Software Architecture](#software-architecture)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
 - [Detailed Description](#detailed-description)
-    - [What was the overall Vision of our Project?](#what-was-the-overall-vision-of-our-project)
-    - [Problem Statement](#problem-statement)
-    - [Solution](#solution)
-    - [Resources](#resources)
-    - [Work Packages](#work-packages)
-        - [Backend](#backend)
-        - [Frontend](#frontend)
-        - [Feedback Pipeline](#feedback-pipeline)
-    - [How do I benefit from this?](#how-do-i-benefit-from-this)
-    - [Requirements](#requirements)
+  - [What was the overall Vision of our Project?](#what-was-the-overall-vision-of-our-project)
+  - [Problem Statement](#problem-statement)
+  - [Solution](#solution)
+  - [Resources](#resources)
+  - [Work Packages](#work-packages)
+    - [Backend](#backend-1)
+    - [Frontend](#frontend-1)
+    - [Feedback Pipeline](#feedback-pipeline)
+  - [How do I benefit from this?](#how-do-i-benefit-from-this)
+  - [Requirements](#requirements)
 
 <!-- /TOC -->
 
@@ -98,6 +98,17 @@ For the cooperation please follow the: [Code Of Conduct](./CODE_OF_CONDUCT.md).
 ## Showcase
 
 ### Demo Video
+
+<p align="center">
+  <video 
+    width="50%" 
+    poster="./images/Video.jpg">
+    <source 
+      src="./Deliverables/2022-02-03_sprint-12-demo-day-video.mkv" 
+      type="video/mp4">
+    Your browser does not support the video tag. 
+  </video>
+</p>
 
 <p align="center">
   <a 
